@@ -2,10 +2,13 @@
 const express = require("express");
 const { randomBytes } = require("crypto");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 //create app
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
+
 //listen on a port
 app.listen("4000", () => {
   console.log("listening on 4000");
@@ -26,11 +29,13 @@ app.post("/posts", (req, res) => {
 
   // extract title from req body
   const title = req.body;
+  const content = req.content;
 
   //add to posts array
   posts[id] = {
     id,
     title,
+    content,
   };
 
   res.status("201").send(posts[id]);
