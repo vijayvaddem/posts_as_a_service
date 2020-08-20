@@ -3,6 +3,7 @@ const express = require("express");
 const { randomBytes } = require("crypto");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const axios = require("axios");
 
 //create app
 const app = express();
@@ -15,15 +16,15 @@ app.listen("4000", () => {
 });
 
 // store data
-const posts = {};
+const documents = {};
 
 //API to get data
-app.get("/posts", (req, res) => {
-  res.send(posts);
+app.get("/documents", (req, res) => {
+  res.send(documents);
 });
 
 //API to post data
-app.post("/posts", (req, res) => {
+app.post("/documents", async (req, res) => {
   //generate random id
   const id = randomBytes(4).toString("hex");
 
@@ -32,11 +33,27 @@ app.post("/posts", (req, res) => {
   const content = req.content;
 
   //add to posts array
-  posts[id] = {
+  documents[id] = {
     id,
     title,
     content,
   };
 
-  res.status("201").send(posts[id]);
+  //post to event bus
+  await axios.post("http://localhost:4005/events", {
+    type: "documentCreated",
+    data: {
+      id,
+      title,
+      content,
+    },
+  });
+
+  res.status("201").send(documents[id]);
+});
+
+//post handler for incoming events request
+app.post("/event", (req, res) => {
+  console.log("Incoming event received for post:", req.body.type);
+  res.send({});
 });
