@@ -32,6 +32,9 @@ app.post("/documents", async (req, res) => {
   const title = req.body;
   const content = req.content;
 
+  console.log("Title", title);
+  console.log("Content", content);
+
   //add to posts array
   documents[id] = {
     id,
