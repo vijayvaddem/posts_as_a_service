@@ -29,8 +29,8 @@ app.post("/documents", async (req, res) => {
   const id = randomBytes(4).toString("hex");
 
   // extract title from req body
-  const title = req.body;
-  const content = req.content;
+  const title = req.body.title;
+  const content = req.body.content;
 
   console.log("Title", title);
   console.log("Content", content);
