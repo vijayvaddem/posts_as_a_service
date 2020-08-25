@@ -12,6 +12,7 @@ app.use(cors());
 
 //listen on a port
 app.listen("4000", () => {
+  console.log("This is v50");
   console.log("listening on 4000");
 });
 
@@ -43,7 +44,7 @@ app.post("/documents", async (req, res) => {
   };
 
   //post to event bus
-  await axios.post("http://localhost:4005/events", {
+  await axios.post("http://event-bus-srv:4005/events", {
     type: "documentCreated",
     data: {
       id,
